@@ -1,0 +1,26 @@
+# Making a vpc
+- https://aws.plainenglish.io/create-reusable-amazon-vpc-configuration-using-terraform-module-c49354c462cd
+- https://spacelift.io/blog/terraform-aws-vpc
+- https://javatodev.com/how-to-build-aws-vpc-using-terraform-step-by-step/
+
+# VPC and CIDRs
+- https://serverfault.com/questions/753734/multiple-vpcs-with-same-cidr
+- https://stackoverflow.com/questions/65719108/how-do-i-decide-the-cidr-blocks-for-public-and-private-subnets-and-vpc
+
+# NATGW best practice
+- https://stackoverflow.com/questions/44720735/aws-best-practice-shall-i-have-a-nat-gateway-in-each-az
+- https://stackoverflow.com/questions/66254645/aws-vpc-subnet-route-table-best-practices#:~:text=Generally%20the%20best%20practice%20is,NATs%20AZ%20is%20facing%20issues
+- https://www.reddit.com/r/aws/comments/9wv9cb/can_we_use_same_route_table_for_multiple_subnets/
+
+# Managing multiple environments
+- https://techifysolutions.com/managing-multiple-environments-with-terraform/
+- https://blog.devops.dev/how-to-manage-multiple-environments-with-terraform-with-the-use-of-modules-d4ca512d7b4a
+
+# Useful
+#- >21 days of code
+- https://github.com/100daysofdevops/21_days_of_aws_using_terraform/blob/master/vpc/main.tf
+#- >ALB info
+- https://skundunotes.com/2022/07/30/add-an-application-load-balancer-to-aws-ec2-using-terraform/
+#-> Modules
+- https://hands-on.cloud/terraform-module/
+- https://towardsaws.com/terraform-deploying-an-external-load-balancer-with-a-private-auto-scaling-group-ef709990d5a7
