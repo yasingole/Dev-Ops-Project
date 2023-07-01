@@ -74,7 +74,7 @@ resource "aws_nat_gateway" "webapp_ngw" {
 
 # Private route table and route
 resource "aws_route_table" "private_rt" {
-  count = var.environment == "Production" ? length(aws_subnet.public_subnet) : 1  
+    count = length(aws_subnet.private_subnet)
   vpc_id = aws_vpc.webapp_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
