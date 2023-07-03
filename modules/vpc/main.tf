@@ -3,7 +3,7 @@
 resource "aws_vpc" "webapp_vpc" {
   cidr_block = var.vpc_cidr
   tags = {
-    Name = "webapp vpc"
+    Name = "${var.environment} webapp vpc"
     Environment = var.environment
   }
 }
@@ -74,14 +74,14 @@ resource "aws_nat_gateway" "webapp_ngw" {
 
 # Private route table and route
 resource "aws_route_table" "private_rt" {
-    count = length(aws_subnet.private_subnet)
+  count = length(aws_subnet.private_subnet)
   vpc_id = aws_vpc.webapp_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = var.environment == "Production" ? aws_nat_gateway.webapp_ngw[count.index].id : aws_nat_gateway.webapp_ngw[0].id
   }
   tags = {
-    Name = "${var.environment}-private-route-table"
+    Name = "${var.environment}-${var.azs[count.index]}-private-route-table"
   }
 }
 
@@ -96,6 +96,6 @@ resource "aws_route_table_association" "public_rt_assoc" {
 resource "aws_route_table_association" "private_rt_assoc" {
   count          = length(aws_subnet.private_subnet)
   subnet_id      = aws_subnet.private_subnet[count.index].id
-  route_table_id = var.environment == "Production" ? aws_route_table.private_rt[count.index].id : aws_route_table.private_rt[0].id
+  route_table_id = aws_route_table.private_rt[count.index].id
 }
 
