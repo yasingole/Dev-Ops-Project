@@ -1,15 +1,15 @@
 # Environment
 variable "environment" {
-  type = string
+  type        = string
   description = "When set to dev/staging: Only one nat gateway and eip will be created. However, when set to production: One nat gateway and eip for every public subnet"
-  default = ""
+  default     = ""
 }
 
 # VPC Vars
 variable "vpc_cidr" {
   description = "VPC CIDR"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 variable "public_subnets" {
   type = list(string)
@@ -20,19 +20,19 @@ variable "private_subnets" {
 }
 
 variable "azs" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 
 # Webapp Vars
 variable "key_name" {
-  type = string
+  type    = string
   default = "webappkey"
 }
 
 variable "instance_type" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -41,17 +41,17 @@ variable "instance_type" {
 # Region
 variable "aws_region" {
   description = "Region in which AWS Resources to be created"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 # Backend Config
 variable "bucket_name" {
-  type = string
+  type    = string
   default = ""
 }
 variable "dynamodb_name" {
-  type = string
+  type    = string
   default = "staging"
 }
 
