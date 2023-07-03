@@ -16,6 +16,19 @@
 - https://techifysolutions.com/managing-multiple-environments-with-terraform/
 - https://blog.devops.dev/how-to-manage-multiple-environments-with-terraform-with-the-use-of-modules-d4ca512d7b4a
 
+# CICD 
+- Production-Ready Infrastructure + DevOps Workflows in 5 Minutes with Terraform + GitLab
+https://www.youtube.com/watch?v=tp0V5hqRmfc&t=64s
+- GitHub Actions Tutorial
+https://www.youtube.com/watch?v=TLB5MY9BBa4
+- Automate the infrastructure deployment 
+ https://awstip.com/automate-the-infrastructure-deployment-for-different-environments-using-terraform-github-actions-5d66024dbe35
+- Managing Terraform with GitHub Actions & How to Scale
+https://spacelift.io/blog/github-actions-terraform
+- 📌 What CI/CD means for the infrastructure — Learn Terraform in one hour
+https://www.youtube.com/watch?v=0mkLCyZOPKQ
+
+
 # Useful
 #- >21 days of code
 - https://github.com/100daysofdevops/21_days_of_aws_using_terraform/blob/master/vpc/main.tf
