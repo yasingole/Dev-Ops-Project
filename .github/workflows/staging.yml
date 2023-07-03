@@ -6,7 +6,7 @@ on:
     - master
     paths: 
     - environments/staging/**
-  pull_request: 
+  pull_request:
     branches: 
     - master
     paths:
