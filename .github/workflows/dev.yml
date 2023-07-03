@@ -46,4 +46,7 @@ jobs:
         run: terraform apply --auto-approve
         working-directory: environments/dev/
 
-       
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy --auto-approve
+        working-directory: environments/dev/
