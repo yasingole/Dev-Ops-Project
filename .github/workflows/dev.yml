@@ -5,8 +5,7 @@ on:
     branches: 
     - master
     paths: 
-    - environments/dev
-  /**
+    - environments/dev/**
   pull_request: 
     branches:
     - master
