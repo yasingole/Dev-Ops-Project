@@ -12,7 +12,7 @@ azs = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 
 
 # Instance tfvars
-instance_type = "t2.micro"
+instance_type = "t2.nano"
 
 key_name = "webappkey"
 
