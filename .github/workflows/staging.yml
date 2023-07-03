@@ -6,8 +6,8 @@ on:
     - master
     paths: 
     - environments/staging/**
-  pull_request:
-    branches: 
+  pull_request: 
+    branches:
     - master
     paths:
     - environments/staging/**
@@ -34,16 +34,19 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: .environments/staging/
+        working-directory: environments/staging/
       
       - name: Terraform Plan
         id:  plan
         run: terraform plan
-        working-directory: .environments/staging/
+        working-directory: environments/staging/
 
       - name: Terraform Apply
         id:  apply
         run: terraform apply --auto-approve
-        working-directory: .environments/staging/
+        working-directory: environments/staging/
 
-       
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy --auto-approve
+        working-directory: environments/staging/
