@@ -51,7 +51,6 @@ To ensure consistencey and make our code reusable across our differnt production
 
 `variables.tf` Components:
 - VPC CIDR
-
 ```
 variable "vpc_cidr" {
   description = "VPC CIDR"
@@ -60,9 +59,11 @@ variable "vpc_cidr" {
 }
 ```
 - Environment
-      ``` variable "environment" {
+      ```
+  variable "environment" {
   type = string
   default = ""
-} ```
+}
+```
 
 
