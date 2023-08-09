@@ -46,4 +46,15 @@ The directory structure is clear and organized for the different components of t
 - `.gitignore`: Will be used to hide files containing sensitivw details e.g terraform.tfstate
 
 ## Modules:
-`VPC`
+## `VPC`:
+To ensure consistencey and make our code reusable across our differnt production environments, we'll be using `variables.tf` file.
+
+Components:
+- VPC CIDR
+`variable "vpc_cidr" {
+  description = "VPC CIDR"
+  type = string
+  default = ""
+}`
+
+
