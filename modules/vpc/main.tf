@@ -51,7 +51,7 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# Elastic IP and NAT Gateway
+# Elastic IP 
 resource "aws_eip" "eip" {
   count = var.environment == "Production" ? length(aws_subnet.public_subnet) : 1
   tags = {
