@@ -256,3 +256,21 @@ variable "key_name" {
   default = ""
 }
 ```
+
+To access the outputs of our module, we'll also be creating an outputs.tf file.
+
+`Outputs.tf` Components:
+- Application Loadbancer DNS Name
+- Private Instance ID
+- Private Instance Private IPs
+```
+output "alb_dns_name" {
+  value = aws_lb.webapp_alb.dns_name
+}
+output "private_instance_ids" {
+  value = aws_instance.webapp_instance[*].id
+}
+output "private_instance_private_ips" {
+  value = aws_instance.webapp_instance[*].private_ip
+}
+```
