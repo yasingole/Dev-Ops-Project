@@ -38,3 +38,5 @@ terraform.rc
 # Other files 
 webappkey.pem
 *.DS_Store
+
+/images
