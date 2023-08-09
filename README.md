@@ -46,7 +46,7 @@ The directory structure is clear and organized for the different components of t
 - `.gitignore`: Will be used to hide files containing sensitivw details e.g terraform.tfstate
 
 ## Modules:
-# `VPC`:
+## `VPC`:
 To ensure consistencey and make our code reusable across our differnt production environments, we'll be using `variables.tf` file.
 
 `variables.tf` Components:
@@ -73,6 +73,13 @@ variable "public_subnets" {
 }
 
 variable "private_subnets" {
+  type = list(string)
+  default = []
+}
+```
+- Availability Zones
+```
+variable "azs" {
   type = list(string)
   default = []
 }
