@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy an Nginx Web App in three different production environments.
+This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy a Nginx Web App in three different production environments.
 
 This project focuses on:
 
@@ -45,3 +45,5 @@ The directory structure is clear and organized for the different components of t
 - `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage
 - `.gitignore`: Will be used to hide files containing sensitivw details e.g terraform.tfstate
 
+## Modules:
+`VPC`
