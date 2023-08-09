@@ -274,3 +274,20 @@ output "private_instance_private_ips" {
   value = aws_instance.webapp_instance[*].private_ip
 }
 ```
+
+Now again to our main event. To deploy the webapp we need the following resources:
+- Instance 
+    - This resource is key for deploying the webapp. It will deploy an instance within the private subnets, with the specified AMI, Instance type, security group, and key.
+    - Within this respurce were also using custom user data scripting to set up the instance with the neccessary software to run an NGINX server.
+- AMI Datasource
+    - This ensures the latest Amazon Linux 2 AMI is fetched.
+- Application Load Balancer Security Group
+    - The security group for the Application Load Balancer (ALB) controls traffic access to our instances. Inbound rules allow HTTP traffic from the internet (port 80), while outbound rules allow all traffic. 
+- Application Load Balancer
+    - The ALB efficiently distributes incoming traffic across our instances, enhancing availability and fault tolerance. It's connected to the public subnets, allowing external users to access our web application. The security group limits access and ensures a controlled flow of traffic.
+- Target Group
+    - This target group defines how the ALB routes traffic to instances. It's responsible for monitoring and maintaining the health of instances using a health check. The ALB relies on this group to forward traffic effectively.
+- ALB Listener
+    - The listener on the ALB defines how it listens for incoming traffic. This configuration directs incoming HTTP traffic (port 80) to the specified target group for distribution among instances.
+- Target Group Attachment (aws_lb_target_group_attachment)
+    - This resource attaches each instance to the target group, enabling the ALB to distribute traffic to our instances. The count feature ensures proper attachment for each instance.  
