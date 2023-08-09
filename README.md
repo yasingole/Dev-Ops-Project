@@ -87,7 +87,9 @@ output "internet_gateway_id" {
 ```
 
 Now to the main stage of our VPC module. In order to create our VPC with the goal of deploying an NGINX server we will need the following resources:
+
 `Main.tf` Resources:
+
 ```
 # VPC Module
 # VPC
