@@ -405,6 +405,81 @@ variable "dynamodb_name" {
   default = "dev"
 }
 ```
-The variables here (except webapp key) are empty and not defined. As we have created reusable modules to deploy our infrastructure across different production environments, most of our variables will change to reflect their respective environment. Rather than define them within our `variables.tf` we will define them within a `terraform.tfvars` file.
+The variables here are empty and not defined. As we have created reusable modules to deploy our infrastructure across different production environments, most of our variables will change to reflect their respective environment. Rather than define them within our `variables.tf` we will define them within a `terraform.tfvars` file.
+
+`terraform.tfvars`:
+
+Here due to our module design, we can easily configure the required variables for each production environment. The key changes between the environments are:
+- The environment
+- VPC CIDR
+- Public Subnet CIDRs
+- Private Subnet CIDRs
+- Instance Type
+- Key Name
+
+For this project these arr the `terraform.tfvars` for each production environment:
+Dev:
+```
+# Environment
+environment = "Dev"
+
+# VPC tfvars
+vpc_cidr = "10.1.0.0/16"
+
+public_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
+
+private_subnets = ["10.1.3.0/24", "10.1.4.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
+Staging:
+```
+# Environment
+environment = "Staging"
+
+# VPC tfvars
+vpc_cidr = "192.168.0.0/16"
+
+public_subnets = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
+
+private_subnets = ["192.168.11.0/24", "192.168.12.0/24", "192.168.13.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
+Production:
+```
+# Environment
+environment = "Production"
+
+# VPC tfvars
+vpc_cidr = "10.0.0.0/16"
+
+public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+
+private_subnets = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
 
 
