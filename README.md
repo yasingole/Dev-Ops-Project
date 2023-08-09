@@ -22,7 +22,7 @@ The directory structure is clear and organized for the different components of t
 - `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage.
 - `.gitignore`: Will be used to hide files containing sensitive details, e.g., terraform.tfstate.
 
-# Modules: VPC
+## Modules: VPC
 To ensure consistency and make our code reusable across different production environments, we'll be using a variables.tf file.
 
 `Variables.tf` Components:
@@ -279,6 +279,7 @@ Now again to our main event. To deploy the webapp we need the following resource
 - Instance 
     - This resource is key for deploying the webapp. It will deploy an instance within the private subnets, with the specified AMI, Instance type, security group, and key.
     - Within this respurce were also using custom user data scripting to set up the instance with the neccessary software to run an NGINX server.
+    - The necessary key needed has been generated from the aws console.
 - AMI Datasource
     - This ensures the latest Amazon Linux 2 AMI is fetched.
 - Application Load Balancer Security Group
@@ -291,3 +292,119 @@ Now again to our main event. To deploy the webapp we need the following resource
     - The listener on the ALB defines how it listens for incoming traffic. This configuration directs incoming HTTP traffic (port 80) to the specified target group for distribution among instances.
 - Target Group Attachment (aws_lb_target_group_attachment)
     - This resource attaches each instance to the target group, enabling the ALB to distribute traffic to our instances. The count feature ensures proper attachment for each instance.  
+
+## Environment
+Now that our modules are complete, we can progress to our environments folder. Each environment will have an identical `main.tf`, `variables.tf`, and `versions.tf` file.
+To make use of the modules we created, we need to call them within the `main.tf` file:
+
+`main.tf`:
+```
+# VPC Module
+module "vpc" {
+  source = "../../modules/vpc"
+
+  environment     = var.environment
+  vpc_cidr        = var.vpc_cidr
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+  azs             = var.azs
+}
+
+# Instance and ALB Module
+module "webapp" {
+  source = "../../modules/webapp"
+
+  vpc_id             = module.vpc.vpc_id
+  environment        = var.environment
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  private_subnet_ids = module.vpc.private_subnet_ids
+  instance_type      = var.instance_type
+  key_name           = var.key_name
+
+}
+```
+
+Then we need to create our `variables.tf` and `versions.tf` file:
+
+`versions.tf`:
+```
+# Terraform Block
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  backend "s3" {
+    bucket = "tf-state-deenginers-project"
+    key    = "dev/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}
+
+# Provider Block
+provider "aws" {
+  region  = var.aws_region
+}
+```
+Here we also use a remote backend to store our tfstate and and lock files in a s3 bucket and dynamoDB backend respectivley. 
+
+`variables.tf`:
+```
+# Environment
+variable "environment" {
+  type        = string
+  description = "When set to dev/staging: Only one nat gateway and eip will be created. However, when set to production: One nat gateway and eip for every public subnet"
+  default     = ""
+}
+
+# VPC Vars
+variable "vpc_cidr" {
+  description = "VPC CIDR"
+  type        = string
+  default     = ""
+}
+variable "public_subnets" {
+  type = list(string)
+}
+variable "private_subnets" {
+  type = list(string)
+}
+variable "azs" {
+  type    = list(string)
+  default = []
+}
+
+# Webapp Vars
+variable "key_name" {
+  type    = string
+  default = "webappkey"
+}
+variable "instance_type" {
+  type    = string
+  default = ""
+}
+
+# Generic vars
+# Region
+variable "aws_region" {
+  description = "Region in which AWS Resources to be created"
+  type        = string
+  default     = ""
+}
+
+# Backend Config
+variable "bucket_name" {
+  type    = string
+  default = ""
+}
+variable "dynamodb_name" {
+  type    = string
+  default = "dev"
+}
+```
+The variables here (except webapp key) are empty and not defined. As we have created reusable modules to deploy our infrastructure across different production environments, most of our variables will change to reflect their respective environment. Rather than define them within our `variables.tf` we will define them within a `terraform.tfvars` file.
+
+
