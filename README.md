@@ -59,7 +59,7 @@ variable "vpc_cidr" {
 }
 ```
 - Environment
-  ```
+```
   variable "environment" {
   type = string
   default = ""
