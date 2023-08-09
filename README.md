@@ -23,11 +23,11 @@ Deenginers DevOps Project/
 
 ┣ environments/
 
-  ┗ dev/
+      ┗ dev/
 
-  ┣ prod/
+      ┗ prod/
 
-  ┗ staging/
+      ┗ staging/
 
 ┣ .github/
 
