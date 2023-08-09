@@ -13,15 +13,15 @@ This project focuses on:
 ## Directory Structure
 The project is organized into the following directory structure:
 
-Deenginers DevOps Project/
+`DevOps Project/`
 
-┣ modules/
+`┣ modules/`
 
-  ┗ vpc/
+      ┗ vpc/
 
-  ┗ webapp/
+      ┗ webapp/
 
-┣ environments/
+`┣ environments/`
 
       ┗ dev/
 
@@ -29,11 +29,11 @@ Deenginers DevOps Project/
 
       ┗ staging/
 
-┣ .github/
+`┣ .github/`
 
-  ┗ workflows/
+      ┗ workflows/
 
-┗ .gitignore
+`┗ .gitignore`
 
 
 
