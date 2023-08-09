@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy a Nginx Web App in three different production environments.
+This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy an Nginx Web App in three different production environments.
 
 This project focuses on:
 
@@ -11,80 +11,73 @@ This project focuses on:
 - Using GitHub Actions workflows to enable automated updates to the infrastructure on pushes and pulls to the master branch.
 
 ## Directory Structure
+
 The project is organized into the following directory structure:
-
-`DevOps Project/`
-
-`┣ modules/`
-
-      ┗ vpc/
-
-      ┗ webapp/
-
-`┣ environments/`
-
-      ┗ dev/
-
-      ┗ prod/
-
-      ┗ staging/
-
-`┣ .github/`
-
-      ┗ workflows/
-
-`┗ .gitignore`
-
-
+DevOps Project/
+┣ modules/
+┃ ┣ vpc/
+┃ ┗ webapp/
+┣ environments/
+┃ ┣ dev/
+┃ ┣ prod/
+┃ ┗ staging/
+┣ .github/
+┃ ┗ workflows/
+┗ .gitignore
 
 
 The directory structure is clear and organized for the different components of the project:
 
 - `modules`: Allows us to use reusable modules for the VPC and web application across different environments.
 - `environments`: Allows us to set specific configuration variables required for each production environment. In our case, we have three environments: dev, staging, and production.
-- `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage
-- `.gitignore`: Will be used to hide files containing sensitivw details e.g terraform.tfstate
+- `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage.
+- `.gitignore`: Will be used to hide files containing sensitive details such as `terraform.tfstate`.
 
-## Modules:
-## `VPC`:
-To ensure consistencey and make our code reusable across our differnt production environments, we'll be using `variables.tf` file.
+## Modules: VPC
 
-`variables.tf` Components:
+To ensure consistency and make our code reusable across different production environments, we'll be using a `variables.tf` file.
+
+## `Variables.tf` Components:
+
 - VPC CIDR
-- Environment Variable (to allow selection of production environment)
+- Environment Variable (to allow selection of the production environment)
 - Public and Private Subnets
 - Availability Zones
-```
+```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
-  type = string
+  type        = string
+  default     = ""
+}
+
+variable "environment" {
+  type    = string
   default = ""
 }
-  variable "environment" {
-  type = string
-  default = ""
-}
+
 variable "public_subnets" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
+
 variable "private_subnets" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
+
 variable "azs" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 ```
 
-To access the outputs of our module we'll also be makiking an `outputs.tf` file.
+To access the outputs of our module, we'll also be creating an outputs.tf file.
 
-`outputs.tf` Components:
+## `Outputs.tf` Components:
 - VPC ID
-- Public and Private Subnet ID's
+- Public and Private Subnet IDs
 - NAT Gateway ID
-- Public Route Table and Private Route Table ID
+- Public and Private Route Table IDs
 - Internet Gateway ID
 ```
 output "vpc_id" {
@@ -115,4 +108,3 @@ output "internet_gateway_id" {
   value = aws_internet_gateway.webapp_igw.id
 }
 ```
-
