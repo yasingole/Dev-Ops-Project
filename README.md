@@ -10,14 +10,14 @@ This project focuses on:
 - Using GitHub Actions workflows to enable automated updates to the infrastructure on pushes and pulls to the master branch.
 
 ## Directory Structure
-The project is organized into the following directory structure:
+The project is organised into the following directory structure:
 ![dir pic](images/dir.png)
 
 
 
-The directory structure is clear and organized for the different components of the project:
+The directory structure is clear and organised for the different components of the project:
 
-- `modules`: Allows us to use reusable modules for the VPC and web application across different environments.
+- `modules`: Allows us to use reusable modules for the VPC and webapp across different environments.
 - `environments`: Allows us to set specific configuration variables required for each production environment. In our case, we have three environments: dev, staging, and production.
 - `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage.
 - `.gitignore`: Will be used to hide files containing sensitive details, e.g., terraform.tfstate.
@@ -90,18 +90,19 @@ Now to the main event of our VPC module. In order to create our VPC with the goa
 
 `Main.tf` Resources:
 - VPC
-    - The VPC serves as the isolated network environment where your resources will reside. It defines the IP address range (CIDR block) for the network.
+    - The VPC serves as the isolated network environment where our resources will reside. It defines the IP address range (CIDR block) for the network.
 - Internet Gateway
-    - The Internet Gateway enables communication between your VPC and the public internet. It's essential for resources in your public subnets to access external services and for users to reach your application.
+    - The Internet Gateway enables communication between our VPC and the public internet. It's essential for resources in our public subnets (the application loadbalancer) to access external services and for users to reach our web app.
 - Public Subnet
-    -  Public subnets host resources that need direct internet access, such as load balancers. They are associated with the VPC and defined by a specific CIDR block and availability zone. In our case the load balancer will be in the public subnet.
+    -  The public subnets host resources that need direct internet access, such as load balancers. They are associated with the VPC and defined by a specific CIDR block and availability zone. In our case the load balancer will be in the public subnet.
 - Private Subnet
-    - Private subnets host resources that should not have direct internet access. In our case the webapp will sit here and will connect to the internet through our NAT Gateway. Similar to public subnets, they are associated with the VPC, designated by a distinct CIDR block and availability zone.
+    - The private subnets host resources that should not have direct internet access. In our case the webapp will sit here and will connect to the internet through our NAT Gateway. Similar to public subnets, they are associated with the VPC, designated by a distinct CIDR block and availability zone.
 - Public Route Table and Route
     - This route table directs traffic within the VPC. In our case, the Public Route sends traffic destined for the internet to the Internet Gateway. 
 - Elastic IP (Conditional)
     - Elastic IPs provide consistent public IP addresses for resources like NAT Gateways, ensuring reliable connectivity with external networks.
-    - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This helps save costs in the Dev and Staging environment productions.
+    - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This allows each NAT Gateway associated with a public subnet to have a dedicated, consistent IP address in a production environment. 
+    - This helps save costs in the Dev and Staging environment productions.
 - NAT Gateway
     - The NAT Gateway allows private instances in the VPC's private subnets to access the internet while remaining secure. In our case our webapp will be sitting in the private subnets. 
     - There is another conditional argument with the count. When the environment is set to "Production", the count is set to the number of public subnets, resulting in multiple NAT Gateways, each associated with an Elastic IP and a distinct public subnet. Conversely, for non-production environments, a single NAT Gateway is created. This again to help save costs in the Dev and Staging environment productions.
@@ -214,10 +215,10 @@ resource "aws_route_table_association" "private_rt_assoc" {
 ```
 
 ## Modules: Webapp
-This webapp module will create or EC2 instances running our Nginx webapp and our application load balancer.
+This webapp module will create our EC2 instances running our Nginx webapp and the application load balancer.
 
 `Variables.tf` Components:
-- Environment Variable (to allow selection of the production environment)
+- Environment Variable (to allow selection of the production environments)
 - Public Subnets
 - Private Subnets
 - Public Subnets ID
@@ -278,7 +279,7 @@ output "private_instance_private_ips" {
 Now again to our main event. To deploy the webapp we need the following resources:
 - Instance 
     - This resource is key for deploying the webapp. It will deploy an instance within the private subnets, with the specified AMI, Instance type, security group, and key.
-    - Within this resource were also using custom user data scripting to set up the instance with the necessary software to run a Nginx server.
+    - Within this resource we’re also using custom user data scripting to set up the instance with the necessary software to run a Nginx server.
     - The necessary key needed has been generated from the aws console.
 - AMI Data source
     - This ensures the latest Amazon Linux 2 AMI is fetched.
@@ -349,7 +350,7 @@ provider "aws" {
   region  = var.aws_region
 }
 ```
-Here we also use a remote backend to store our tfstate and lock files in a s3 bucket and DynamoDB backend respectively. 
+Here we also use a remote backend to store our tfstate and lock files in a S3 bucket and DynamoDB backend respectively. 
 
 `variables.tf`:
 ```
@@ -418,6 +419,7 @@ Here due to our module design, we can easily configure the required variables fo
 - Key Name
 
 For this project these are the `terraform.tfvars` for each production environment:
+
 Dev:
 ```
 # Environment
