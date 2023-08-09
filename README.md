@@ -11,25 +11,15 @@ This project is an automated infrastructure deployment and CI/CD project that le
 
 
 
-Deenginers DevOps Project/
-
-┣ modules/
-
-┃ ┣ vpc/
-
-┃ ┗ webapp/
-
-┣ environments/
-
-┃ ┣ dev/
-
-┃ ┣ prod/
-
-┃ ┗ staging/
-
-┣ .github/
-
-┃ ┗ workflows/
-
-┗ .gitignore
+DevOps Project/
+├── ┣ modules/
+├── ┃ ┣ vpc/
+├── ┃ ┗ webapp/
+├── ┣ environments/
+├── ┃ ┣ dev/
+├── ┃ ┣ prod/
+├── ┃ ┗ staging/
+├── ┣ .github/
+├── ┃ ┗ workflows/
+└── ┗ .gitignore
 
