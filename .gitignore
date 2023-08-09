@@ -39,4 +39,4 @@ terraform.rc
 webappkey.pem
 *.DS_Store
 
-
+/images
