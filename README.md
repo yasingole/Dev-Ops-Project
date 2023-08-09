@@ -43,4 +43,5 @@ The directory structure is clear and organized for the different components of t
 - `modules`: Allows us to use reusable modules for the VPC and web application across different environments.
 - `environments`: Allows us to set specific configuration variables required for each production environment. In our case, we have three environments: dev, staging, and production.
 - `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage
+- `.gitignore`: Will be used to hide files containing sensitivw details e.g terraform.tfstate
 
