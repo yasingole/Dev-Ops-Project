@@ -49,7 +49,7 @@ The directory structure is clear and organized for the different components of t
 ## `VPC`:
 To ensure consistencey and make our code reusable across our differnt production environments, we'll be using `variables.tf` file.
 
-Components:
+`variables.tf` Components:
 - VPC CIDR
 
 ```
