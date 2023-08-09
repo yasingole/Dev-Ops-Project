@@ -51,6 +51,7 @@ To ensure consistencey and make our code reusable across our differnt production
 
 Components:
 - VPC CIDR
+
 ```
 variable "vpc_cidr" {
   description = "VPC CIDR"
