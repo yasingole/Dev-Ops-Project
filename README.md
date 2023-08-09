@@ -59,5 +59,10 @@ variable "vpc_cidr" {
   default = ""
 }
 ```
+- Environment
+      ``` variable "environment" {
+  type = string
+  default = ""
+} ```
 
 
