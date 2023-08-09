@@ -17,10 +17,12 @@ The project is organized into the following directory structure:
 ┣ modules/
 ┃ ┣ vpc/
 ┃ ┗ webapp/
+
 ┣ environments/
 ┃ ┣ dev/
 ┃ ┣ prod/
 ┃ ┗ staging/
+
 ┣ .github/
 ┃ ┗ workflows/
 ┗ .gitignore
