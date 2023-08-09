@@ -86,20 +86,29 @@ output "internet_gateway_id" {
 }
 ```
 
-Now to the main stage of our VPC module. In order to create our VPC with the goal of deploying an NGINX server we will need the following resources:
+Now to the main event of our VPC module. In order to create our VPC with the goal of deploying an NGINX server we will need the following resources:
 
 `Main.tf` Resources:
 - VPC
+    - The VPC serves as the isolated network environment where your resources will reside. It defines the IP address range (CIDR block) for the network.
 - Internet Gateway
+    - The Internet Gateway enables communication between your VPC and the public internet. It's essential for resources in your public subnets to access external services and for users to reach your application.
 - Public Subnet
+    -  Public subnets host resources that need direct internet access, such as load balancers. They are associated with the VPC and defined by a specific CIDR block and availability zone. In our case the load balancer will be in the public subnet.
 - Private Subnet
+    - Private subnets host resources that should not have direct internet access. In our case the webapp will sit here and will connect to the internet through our NAT Gateway. Similar to public subnets, they are associated with the VPC, designated by a distinct CIDR block and availability zone.
 - Public Route Table and Route
+    - This route table directs traffic within the VPC. In our case, the Public Route sends traffic destined for the internet to the Internet Gateway. 
 - Elastic IP (Conditional)
+    - Elastic IPs provide consistent public IP addresses for resources like NAT Gateways, ensuring reliable connectivity with external networks.
     - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This helps save costs in the Dev and Staginging environment productions.
 - NAT Gateway
+    - The NAT Gateway allows private instances in the VPC's private subnets to access the internet while remaining secure. In our case our webapp will be sitting in the private subnets. 
+    - There is another conditional argument with the count. When the environment is set to "Production", the count is set to the number of public subnets, resulting in multiple NAT Gateways, each associated with an Elastic IP and a distinct public subnet. Conversely, for non-production environments, a single NAT Gateway is created. This again to help save costs in the Dev and Staginging environment productions.
 - Private Route Table and Route
-- Public Route Table Association
-- Private Route Table Association
+    - This route table is used by private subnets to direct outbound traffic through the NAT Gateway, ensuring secure internet access for our webapp.
+- Public Route Table Association and Private Route Table Association
+    - These associations link the subnets to their respective route tables, ensuring proper routing of network traffic within the VPC.
 
 ```
 # VPC Module
