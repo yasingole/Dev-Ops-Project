@@ -11,7 +11,8 @@ This project focuses on:
 
 ## Directory Structure
 The project is organized into the following directory structure:
-![dir pic](Deenginers DevOps Project /images/dir.png)
+![dir pic](images/dir.png)
+
 
 
 The directory structure is clear and organized for the different components of the project:
