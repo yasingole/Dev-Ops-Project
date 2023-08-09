@@ -1,7 +1,7 @@
 # DevOps Project (AWS, Terraform, Git, Linux, CI/CD)
 
 ## Overview
-This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy an Nginx Web App in three different production environments.
+This project is an automated infrastructure deployment and CI/CD project that leverages the power of AWS, Terraform, GitHub Actions, and Git to deploy a Nginx Web App in three different production environments.
 
 This project focuses on:
 
@@ -86,7 +86,7 @@ output "internet_gateway_id" {
 }
 ```
 
-Now to the main event of our VPC module. In order to create our VPC with the goal of deploying an NGINX server we will need the following resources:
+Now to the main event of our VPC module. In order to create our VPC with the goal of deploying an Nginx server we will need the following resources:
 
 `Main.tf` Resources:
 - VPC
@@ -101,10 +101,10 @@ Now to the main event of our VPC module. In order to create our VPC with the goa
     - This route table directs traffic within the VPC. In our case, the Public Route sends traffic destined for the internet to the Internet Gateway. 
 - Elastic IP (Conditional)
     - Elastic IPs provide consistent public IP addresses for resources like NAT Gateways, ensuring reliable connectivity with external networks.
-    - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This helps save costs in the Dev and Staginging environment productions.
+    - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This helps save costs in the Dev and Staging environment productions.
 - NAT Gateway
     - The NAT Gateway allows private instances in the VPC's private subnets to access the internet while remaining secure. In our case our webapp will be sitting in the private subnets. 
-    - There is another conditional argument with the count. When the environment is set to "Production", the count is set to the number of public subnets, resulting in multiple NAT Gateways, each associated with an Elastic IP and a distinct public subnet. Conversely, for non-production environments, a single NAT Gateway is created. This again to help save costs in the Dev and Staginging environment productions.
+    - There is another conditional argument with the count. When the environment is set to "Production", the count is set to the number of public subnets, resulting in multiple NAT Gateways, each associated with an Elastic IP and a distinct public subnet. Conversely, for non-production environments, a single NAT Gateway is created. This again to help save costs in the Dev and Staging environment productions.
 - Private Route Table and Route
     - This route table is used by private subnets to direct outbound traffic through the NAT Gateway, ensuring secure internet access for our webapp.
 - Public Route Table Association and Private Route Table Association
@@ -214,7 +214,7 @@ resource "aws_route_table_association" "private_rt_assoc" {
 ```
 
 ## Modules: Webapp
-This webapp module will create or EC2 instances running our NGINX webapp and our application load balancer.
+This webapp module will create or EC2 instances running our Nginx webapp and our application load balancer.
 
 `Variables.tf` Components:
 - Environment Variable (to allow selection of the production environment)
@@ -260,7 +260,7 @@ variable "key_name" {
 To access the outputs of our module, we'll also be creating an outputs.tf file.
 
 `Outputs.tf` Components:
-- Application Loadbancer DNS Name
+- Application Load balancer DNS Name
 - Private Instance ID
 - Private Instance Private IPs
 ```
@@ -278,9 +278,9 @@ output "private_instance_private_ips" {
 Now again to our main event. To deploy the webapp we need the following resources:
 - Instance 
     - This resource is key for deploying the webapp. It will deploy an instance within the private subnets, with the specified AMI, Instance type, security group, and key.
-    - Within this respurce were also using custom user data scripting to set up the instance with the neccessary software to run an NGINX server.
+    - Within this resource were also using custom user data scripting to set up the instance with the necessary software to run a Nginx server.
     - The necessary key needed has been generated from the aws console.
-- AMI Datasource
+- AMI Data source
     - This ensures the latest Amazon Linux 2 AMI is fetched.
 - Application Load Balancer Security Group
     - The security group for the Application Load Balancer (ALB) controls traffic access to our instances. Inbound rules allow HTTP traffic from the internet (port 80), while outbound rules allow all traffic. 
@@ -349,14 +349,14 @@ provider "aws" {
   region  = var.aws_region
 }
 ```
-Here we also use a remote backend to store our tfstate and and lock files in a s3 bucket and dynamoDB backend respectivley. 
+Here we also use a remote backend to store our tfstate and lock files in a s3 bucket and DynamoDB backend respectively. 
 
 `variables.tf`:
 ```
 # Environment
 variable "environment" {
   type        = string
-  description = "When set to dev/staging: Only one nat gateway and eip will be created. However, when set to production: One nat gateway and eip for every public subnet"
+  description = "When set to dev/staging: Only one NAT gateway and eip will be created. However, when set to production: One NAT gateway and eip for every public subnet"
   default     = ""
 }
 
@@ -417,7 +417,7 @@ Here due to our module design, we can easily configure the required variables fo
 - Instance Type
 - Key Name
 
-For this project these arr the `terraform.tfvars` for each production environment:
+For this project these are the `terraform.tfvars` for each production environment:
 Dev:
 ```
 # Environment
