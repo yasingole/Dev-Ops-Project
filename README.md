@@ -17,13 +17,13 @@ Deenginers DevOps Project/
 
 ┣ modules/
 
-  ┣ vpc/
+  ┗ vpc/
 
   ┗ webapp/
 
 ┣ environments/
 
-  ┣ dev/
+  ┗ dev/
 
   ┣ prod/
 
