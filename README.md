@@ -12,17 +12,6 @@ This project focuses on:
 ## Directory Structure
 The project is organized into the following directory structure:
 
-DevOps Project/
-┣ modules/
-┃ ┣ vpc/
-┃ ┗ webapp/
-┣ environments/
-┃ ┣ dev/
-┃ ┣ prod/
-┃ ┗ staging/
-┣ .github/
-┃ ┗ workflows/
-┗ .gitignore
 
 The directory structure is clear and organized for the different components of the project:
 
@@ -93,4 +82,5 @@ output "private_route_table_id" {
 output "internet_gateway_id" {
   value = aws_internet_gateway.webapp_igw.id
 }
+```
 
