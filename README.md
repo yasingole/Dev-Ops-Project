@@ -256,3 +256,230 @@ variable "key_name" {
   default = ""
 }
 ```
+
+To access the outputs of our module, we'll also be creating an outputs.tf file.
+
+`Outputs.tf` Components:
+- Application Loadbancer DNS Name
+- Private Instance ID
+- Private Instance Private IPs
+```
+output "alb_dns_name" {
+  value = aws_lb.webapp_alb.dns_name
+}
+output "private_instance_ids" {
+  value = aws_instance.webapp_instance[*].id
+}
+output "private_instance_private_ips" {
+  value = aws_instance.webapp_instance[*].private_ip
+}
+```
+
+Now again to our main event. To deploy the webapp we need the following resources:
+- Instance 
+    - This resource is key for deploying the webapp. It will deploy an instance within the private subnets, with the specified AMI, Instance type, security group, and key.
+    - Within this respurce were also using custom user data scripting to set up the instance with the neccessary software to run an NGINX server.
+    - The necessary key needed has been generated from the aws console.
+- AMI Datasource
+    - This ensures the latest Amazon Linux 2 AMI is fetched.
+- Application Load Balancer Security Group
+    - The security group for the Application Load Balancer (ALB) controls traffic access to our instances. Inbound rules allow HTTP traffic from the internet (port 80), while outbound rules allow all traffic. 
+- Application Load Balancer
+    - The ALB efficiently distributes incoming traffic across our instances, enhancing availability and fault tolerance. It's connected to the public subnets, allowing external users to access our web application. The security group limits access and ensures a controlled flow of traffic.
+- Target Group
+    - This target group defines how the ALB routes traffic to instances. It's responsible for monitoring and maintaining the health of instances using a health check. The ALB relies on this group to forward traffic effectively.
+- ALB Listener
+    - The listener on the ALB defines how it listens for incoming traffic. This configuration directs incoming HTTP traffic (port 80) to the specified target group for distribution among instances.
+- Target Group Attachment (aws_lb_target_group_attachment)
+    - This resource attaches each instance to the target group, enabling the ALB to distribute traffic to our instances. The count feature ensures proper attachment for each instance.  
+
+## Environment
+Now that our modules are complete, we can progress to our environments folder. Each environment will have an identical `main.tf`, `variables.tf`, and `versions.tf` file.
+To make use of the modules we created, we need to call them within the `main.tf` file:
+
+`main.tf`:
+```
+# VPC Module
+module "vpc" {
+  source = "../../modules/vpc"
+
+  environment     = var.environment
+  vpc_cidr        = var.vpc_cidr
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+  azs             = var.azs
+}
+
+# Instance and ALB Module
+module "webapp" {
+  source = "../../modules/webapp"
+
+  vpc_id             = module.vpc.vpc_id
+  environment        = var.environment
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  private_subnet_ids = module.vpc.private_subnet_ids
+  instance_type      = var.instance_type
+  key_name           = var.key_name
+
+}
+```
+
+Then we need to create our `variables.tf` and `versions.tf` file:
+
+`versions.tf`:
+```
+# Terraform Block
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  backend "s3" {
+    bucket = "tf-state-deenginers-project"
+    key    = "dev/terraform.tfstate"
+    region = "eu-west-2"
+  }
+}
+
+# Provider Block
+provider "aws" {
+  region  = var.aws_region
+}
+```
+Here we also use a remote backend to store our tfstate and and lock files in a s3 bucket and dynamoDB backend respectivley. 
+
+`variables.tf`:
+```
+# Environment
+variable "environment" {
+  type        = string
+  description = "When set to dev/staging: Only one nat gateway and eip will be created. However, when set to production: One nat gateway and eip for every public subnet"
+  default     = ""
+}
+
+# VPC Vars
+variable "vpc_cidr" {
+  description = "VPC CIDR"
+  type        = string
+  default     = ""
+}
+variable "public_subnets" {
+  type = list(string)
+}
+variable "private_subnets" {
+  type = list(string)
+}
+variable "azs" {
+  type    = list(string)
+  default = []
+}
+
+# Webapp Vars
+variable "key_name" {
+  type    = string
+  default = "webappkey"
+}
+variable "instance_type" {
+  type    = string
+  default = ""
+}
+
+# Generic vars
+# Region
+variable "aws_region" {
+  description = "Region in which AWS Resources to be created"
+  type        = string
+  default     = ""
+}
+
+# Backend Config
+variable "bucket_name" {
+  type    = string
+  default = ""
+}
+variable "dynamodb_name" {
+  type    = string
+  default = "dev"
+}
+```
+The variables here are empty and not defined. As we have created reusable modules to deploy our infrastructure across different production environments, most of our variables will change to reflect their respective environment. Rather than define them within our `variables.tf` we will define them within a `terraform.tfvars` file.
+
+`terraform.tfvars`:
+
+Here due to our module design, we can easily configure the required variables for each production environment. The key changes between the environments are:
+- The environment
+- VPC CIDR
+- Public Subnet CIDRs
+- Private Subnet CIDRs
+- Instance Type
+- Key Name
+
+For this project these arr the `terraform.tfvars` for each production environment:
+Dev:
+```
+# Environment
+environment = "Dev"
+
+# VPC tfvars
+vpc_cidr = "10.1.0.0/16"
+
+public_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
+
+private_subnets = ["10.1.3.0/24", "10.1.4.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
+Staging:
+```
+# Environment
+environment = "Staging"
+
+# VPC tfvars
+vpc_cidr = "192.168.0.0/16"
+
+public_subnets = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
+
+private_subnets = ["192.168.11.0/24", "192.168.12.0/24", "192.168.13.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
+Production:
+```
+# Environment
+environment = "Production"
+
+# VPC tfvars
+vpc_cidr = "10.0.0.0/16"
+
+public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+
+private_subnets = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
+
+azs = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+
+
+# Instance tfvars
+instance_type = "t2.micro"
+
+key_name = "webappkey"
+```
+
+
+
