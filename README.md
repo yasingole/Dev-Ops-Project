@@ -15,25 +15,25 @@ The project is organized into the following directory structure:
 
 `DevOps Project/`
 
-`┣ modules/`
+      `┣ modules/`
 
-      ┗ vpc/
+            ┗ vpc/
 
-      ┗ webapp/
+            ┗ webapp/
 
-`┣ environments/`
+      `┣ environments/`
 
-      ┗ dev/
+            ┗ dev/
 
-      ┗ prod/
+            ┗ prod/
 
-      ┗ staging/
+            ┗ staging/
 
-`┣ .github/`
+      `┣ .github/`
 
-      ┗ workflows/
+            ┗ workflows/
 
-`┗ .gitignore`
+      `┗ .gitignore`
 
 
 
