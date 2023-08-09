@@ -22,7 +22,7 @@ The directory structure is clear and organized for the different components of t
 - `.github`: Will be used for our GitHub Actions workflows in the CI/CD stage.
 - `.gitignore`: Will be used to hide files containing sensitive details, e.g., terraform.tfstate.
 
-## Modules: VPC
+# Modules: VPC
 To ensure consistency and make our code reusable across different production environments, we'll be using a variables.tf file.
 
 `Variables.tf` Components:
