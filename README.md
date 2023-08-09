@@ -11,17 +11,15 @@ This project is an automated infrastructure deployment and CI/CD project that le
 
 
 
-## 1: Folder Structure
 Deenginers DevOps Project/
-┣ .github/
-┃ ┗ workflows/
+┣ modules/
+┃ ┣ vpc/
+┃ ┗ webapp/
 ┣ environments/
 ┃ ┣ dev/
 ┃ ┣ prod/
 ┃ ┗ staging/
-┣ modules/
-┃ ┣ vpc/
-┃ ┗ webapp/
-┣ .gitignore
-┗ README.md
+┣ .github/
+┃ ┗ workflows/
+┗ .gitignore
 
