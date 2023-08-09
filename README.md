@@ -95,6 +95,7 @@ Now to the main stage of our VPC module. In order to create our VPC with the goa
 - Private Subnet
 - Public Route Table and Route
 - Elastic IP (Conditional)
+    - Here we have a conditional argument with the count. The conditional expression ensures that the code will create multiple Elastic IPs (one for each public subnet) if the environment is "Production", and only a single Elastic IP if it's not. This helps save costs in the Dev and Staginging environment productions.
 - NAT Gateway
 - Private Route Table and Route
 - Public Route Table Association
@@ -154,7 +155,7 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# Elastic IP and NAT Gateway
+# Elastic IP (Conditional)
 resource "aws_eip" "eip" {
   count = var.environment == "Production" ? length(aws_subnet.public_subnet) : 1
   tags = {
