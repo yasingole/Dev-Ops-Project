@@ -14,6 +14,7 @@ This project focuses on:
 The project is organized into the following directory structure:
 
 Deenginers DevOps Project/
+
 ┣ modules/
 
 ┃ ┣ vpc/
