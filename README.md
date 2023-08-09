@@ -17,21 +17,21 @@ Deenginers DevOps Project/
 
 ┣ modules/
 
-┃ ┣ vpc/
+  ┣ vpc/
 
-┃ ┗ webapp/
+  ┗ webapp/
 
 ┣ environments/
 
-┃ ┣ dev/
+  ┣ dev/
 
-┃ ┣ prod/
+  ┣ prod/
 
-┃ ┗ staging/
+  ┗ staging/
 
 ┣ .github/
 
-┃ ┗ workflows/
+  ┗ workflows/
 
 ┗ .gitignore
 
