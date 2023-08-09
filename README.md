@@ -487,10 +487,12 @@ key_name = "webappkey"
 Here we will be using GitHub Actions workflows to enable automated deployment and testing of our terraform managed infrastructure. 
 
 This process incorporates Continuous Integration by validating code changes:
+   
     - Once any changes are pushed, the workflow will trigger a terraform init, and plan outlining what changes will be made by terraform. 
     - The terraform apply step then deploys the infrastructure changes to the production environment (environments/e.g. dev). This stage validates that the changes can be successfully applied and helps catch any issues early in the development process.
 
 This process also aligns with Continuous Deployment principles by automating the deployment and clean-up of infrastructure:
+   
     - During the terraform apply, the deployment is also facilitated. This automates the deployment of the Terraform-managed infrastructure to the production environment.
     - This is also paired with an infrastructure clean up via terraform destroy, ensuring that resources are properly managed and cleaned up after testing.
 
