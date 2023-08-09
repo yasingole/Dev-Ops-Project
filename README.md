@@ -294,7 +294,7 @@ Now again to our main event. To deploy the webapp we need the following resource
 - Target Group Attachment (aws_lb_target_group_attachment)
     - This resource attaches each instance to the target group, enabling the ALB to distribute traffic to our instances. The count feature ensures proper attachment for each instance.  
 
-## Environment
+## Environments
 Now that our modules are complete, we can progress to our environments folder. Each environment will have an identical `main.tf`, `variables.tf`, and `versions.tf` file.
 To make use of the modules we created, we need to call them within the `main.tf` file:
 
