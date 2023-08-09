@@ -51,34 +51,27 @@ To ensure consistencey and make our code reusable across our differnt production
 
 `variables.tf` Components:
 - VPC CIDR
+- Environment Variable (to allow selection of production environment)
+- Public and Private Subnets
+- Availability Zones
 ```
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type = string
   default = ""
 }
-```
-- Environment
-```
   variable "environment" {
   type = string
   default = ""
 }
-```
-- Public and Private Subnets
-```
 variable "public_subnets" {
   type = list(string)
   default = []
 }
-
 variable "private_subnets" {
   type = list(string)
   default = []
 }
-```
-- Availability Zones
-```
 variable "azs" {
   type = list(string)
   default = []
@@ -88,6 +81,11 @@ variable "azs" {
 To access the outputs of our module we'll also be makiking an `outputs.tf` file.
 
 `outputs.tf` Components:
+- VPC ID
+- Public and Private Subnet ID's
+- NAT Gateway ID
+- Public Route Table and Private Route Table ID
+- Internet Gateway ID
 ```
 output "vpc_id" {
   value = aws_vpc.webapp_vpc.id
