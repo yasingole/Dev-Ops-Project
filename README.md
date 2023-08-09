@@ -496,3 +496,63 @@ This process also aligns with Continuous Deployment principles by automating the
 - During the terraform apply, the deployment is also facilitated. This automates the deployment of the Terraform-managed infrastructure to the production environment.
 - This is also paired with an infrastructure clean up via terraform destroy, ensuring that resources are properly managed and cleaned up after testing.
 
+This is the workflow used for the dev production environment:
+
+- Secrets will need to be inputted in the "Settings" tab of your GitHub repository, in the "Secrets" section.
+
+```
+name: "Terraform- dev"
+
+on: 
+  push:
+    branches: 
+    - master
+    paths: 
+    - environments/dev/**
+  pull_request: 
+    branches:
+    - master
+    paths:
+    - environments/dev/**
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_STATE_BUCKET_NAME: ${{ secrets.AWS_TF_STATE_BUCKET_NAME }}
+  PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
+  PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
+  AWS_REGION: eu-west-2
+
+jobs: 
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+      
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: environments/dev/
+      
+      - name: Terraform Plan
+        id:  plan
+        run: terraform plan
+        working-directory: environments/dev/
+
+      - name: Terraform Apply
+        id:  apply
+        run: terraform apply --auto-approve
+        working-directory: environments/dev/
+
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy --auto-approve
+        working-directory: environments/dev/
+```
+
+
