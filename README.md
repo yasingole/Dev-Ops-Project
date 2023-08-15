@@ -500,6 +500,7 @@ This is the workflow used for the dev production environment:
 
 - Secrets will need to be inputted in the "Settings" tab of your GitHub repository, in the "Secrets" section.
 
+Below is an example of the dev environment. For the staging and production environments, any references to dev below will need to be swapped out for the desired environment, resulting in three separate workflows.
 ```
 name: "Terraform- dev"
 
