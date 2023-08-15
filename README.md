@@ -484,7 +484,7 @@ key_name = "webappkey"
 ```
 
 ## CI/CD With GitHub Actions
-Here we will be using GitHub Actions workflows to enable automated deployment and testing of our terraform managed infrastructure. 
+Here we will be using GitHub Actions workflows to enable automated deployment and testing of our terraform managed infrastructure. Each production environment will have its own GitHub Actions workflow.
 
 This process incorporates Continuous Integration by validating code changes:
    
